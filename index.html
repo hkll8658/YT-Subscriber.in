@@ -3,202 +3,405 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YTSubs - Get Free YouTube Subscribers</title>
+    <title>YT Subscriber's - Get Free YouTube Subscribers</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
         }
         
         body {
             background-color: #f9f9f9;
             color: #333;
+        }
+        
+        /* Sidebar styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #ff0000;
+            color: white;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 100;
+        }
+        
+        .sidebar.open {
+            transform: translateX(0);
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .menu {
+            padding: 20px 0;
+        }
+        
+        .menu-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Top bar styles */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background-color: #ff0000;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 90;
+        }
+        
+        .menu-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+        
+        /* Main content styles */
+        .main-content {
+            padding: 80px 20px 20px;
+            min-height: 100vh;
+        }
+        
+        /* Subscription gate styles */
+        .subscription-gate {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 200;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .subscription-gate h2 {
+            margin-bottom: 20px;
+            color: #ff0000;
+        }
+        
+        .social-links {
+            margin: 20px 0;
+        }
+        
+        .social-link {
+            display: block;
+            background-color: #ff0000;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .social-link:hover {
+            background-color: #cc0000;
+        }
+        
+        .verify-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        
+        .verify-btn:hover {
+            background-color: #3e8e41;
+        }
+        
+        /* Homepage styles */
+        .homepage {
+            display: none;
+        }
+        
+        .youtube-logo {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .youtube-logo img {
+            width: 150px;
+        }
+        
+        .description {
+            margin: 20px 0;
             line-height: 1.6;
         }
         
-        header {
-            background-color: #FF0000;
-            color: white;
-            padding: 1rem 0;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        .hero {
-            text-align: center;
-            padding: 3rem 0;
-        }
-        
-        .hero h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #FF0000;
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto 2rem;
-        }
-        
         .cta-button {
-            display: inline-block;
-            background-color: #FF0000;
+            display: block;
+            background-color: #ff0000;
             color: white;
-            padding: 12px 30px;
-            border-radius: 30px;
+            text-align: center;
+            padding: 15px;
+            margin: 20px auto;
+            border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
+            max-width: 300px;
+            transition: background-color 0.3s;
         }
         
         .cta-button:hover {
             background-color: #cc0000;
-            transform: translateY(-2px);
         }
         
-        .how-it-works {
-            background-color: white;
-            padding: 3rem 0;
-            text-align: center;
+        .video-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
         }
         
-        .steps {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            margin-top: 2rem;
+        .video-item {
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         
-        .step {
-            flex: 1;
-            min-width: 250px;
-            margin: 1rem;
-            padding: 1.5rem;
-            background-color: #f9f9f9;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        .video-item video {
+            width: 100%;
+            display: block;
         }
         
-        .step h3 {
-            color: #FF0000;
-            margin-bottom: 1rem;
-        }
-        
-        .testimonials {
-            padding: 3rem 0;
-            text-align: center;
-        }
-        
-        .testimonial-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 2rem;
-        }
-        
-        .testimonial {
-            flex: 1;
-            min-width: 300px;
-            margin: 1rem;
-            padding: 1.5rem;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        .video-title {
+            padding: 10px;
+            font-weight: bold;
         }
         
         footer {
+            text-align: center;
+            padding: 20px;
             background-color: #333;
             color: white;
-            text-align: center;
-            padding: 2rem 0;
-            margin-top: 2rem;
-        }
-        
-        .disclaimer {
-            font-size: 0.8rem;
-            color: #999;
-            margin-top: 2rem;
-            padding: 0 20px;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <h1>YTSubs</h1>
-            <p>Grow your YouTube channel organically</p>
+    <!-- Subscription Gate (shown by default) -->
+    <div class="subscription-gate" id="subscriptionGate">
+        <h2>Get Free YouTube Subscribers</h2>
+        <p>To access our free subscriber service, please subscribe to our YouTube channels and follow us on social media:</p>
+        
+        <div class="social-links">
+            <a href="https://youtube.com/@berry_gaming2.0?si=1kfRQeL8yi2T4E-m" class="social-link" target="_blank">Subscribe to YouTube Channel 1</a>
+            <a href="https://youtube.com/@berry_gaming2.0?si=1kfRQeL8yi2T4E-m" class="social-link" target="_blank">Subscribe to YouTube Channel 2</a>
+            <a href="https://www.instagram.com/my_god_loveyou?igsh=MTllZjU3NnlqbDQxaw==" class="social-link" target="_blank">Follow on Instagram</a>
+            <a href="https://t.me/+xsuuHoblELc5MWE1" class="social-link" target="_blank">Join Telegram Channel</a>
         </div>
-    </header>
+        
+        <p>After subscribing/following all links above, click the button below to verify and access the homepage.</p>
+        <button class="verify-btn" id="verifyBtn">I've Subscribed & Followed All</button>
+    </div>
     
-    <section class="hero">
-        <div class="container">
-            <h2>Get Free YouTube Subscribers</h2>
-            <p>Join our community of content creators and grow your audience by subscribing to each other's channels. Completely free and easy to use!</p>
-            <a href="#signup" class="cta-button">Get Started Now</a>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">YT Subscriber's</div>
+            <button class="close-btn" id="closeSidebar">&times;</button>
         </div>
-    </section>
+        <div class="menu">
+            <div class="menu-item" id="homeMenuItem">Home</div>
+            <div class="menu-item" id="getSubsMenuItem">Get Free Subscriber</div>
+            <div class="menu-item" id="supportMenuItem">Customer Support</div>
+        </div>
+    </div>
     
-    <section class="how-it-works">
-        <div class="container">
-            <h2>How It Works</h2>
-            <div class="steps">
-                <div class="step">
-                    <h3>1. Sign Up</h3>
-                    <p>Create your free account and connect your YouTube channel.</p>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <button class="menu-btn" id="menuBtn">☰</button>
+        <div class="logo">YT Subscriber's</div>
+    </div>
+    
+    <!-- Main Content (Homepage) -->
+    <div class="main-content">
+        <div class="homepage" id="homepage">
+            <div class="youtube-logo">
+                <img src="https://www.youtube.com/img/desktop/yt_1200.png" alt="YouTube Logo">
+            </div>
+            
+            <div class="description">
+                <h2>Grow Your YouTube Channel for Free!</h2>
+                <p>Welcome to the ultimate platform for growing your YouTube channel organically. Our community helps content creators like you get real subscribers, likes, and views without any cost.</p>
+                <p>With our unique system, you can:</p>
+                <ul>
+                    <li>Get real, active subscribers who engage with your content</li>
+                    <li>Increase your watch time and video rankings</li>
+                    <li>Grow your channel faster than ever before</li>
+                    <li>Connect with other creators in your niche</li>
+                </ul>
+            </div>
+            
+            <a href="https://t.me/+xsuuHoblELc5MWE1" class="cta-button" target="_blank">Get Free Subscribers Now</a>
+            
+            <div class="description">
+                <h3>How It Works</h3>
+                <p>Our system works on a simple principle of mutual growth. You subscribe to other channels in our network, and in return, you get subscribers for your own channel. This creates a win-win situation for all creators involved.</p>
+                <p>We strictly prohibit fake bots or inactive accounts. All subscribers you gain through our platform are real people interested in your content category.</p>
+                
+                <h3>YouTube Growth Tips</h3>
+                <p>Getting subscribers is just the first step. To keep them engaged and grow your channel sustainably:</p>
+                <ul>
+                    <li>Post consistently (at least 1-2 videos per week)</li>
+                    <li>Create eye-catching thumbnails and titles</li>
+                    <li>Engage with your audience in the comments</li>
+                    <li>Use relevant tags and descriptions</li>
+                    <li>Promote your videos on social media</li>
+                </ul>
+            </div>
+            
+            <h2 style="text-align: center; margin: 30px 0;">Success Stories</h2>
+            <div class="video-gallery">
+                <div class="video-item">
+                    <video controls>
+                        <source src="video1.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-title">How I Got 10K Subscribers in 30 Days</div>
                 </div>
-                <div class="step">
-                    <h3>2. Subscribe</h3>
-                    <p>Subscribe to other creators in our network to earn points.</p>
+                <div class="video-item">
+                    <video controls>
+                        <source src="video2.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-title">YouTube Algorithm Secrets Revealed</div>
                 </div>
-                <div class="step">
-                    <h3>3. Get Subscribers</h3>
-                    <p>Redeem your points to get subscribers to your own channel.</p>
+                <div class="video-item">
+                    <video controls>
+                        <source src="video3.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-title">From 0 to 100K: My Journey</div>
+                </div>
+                <div class="video-item">
+                    <video controls>
+                        <source src="video4.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-title">Best Tools for YouTube Growth</div>
+                </div>
+                <div class="video-item">
+                    <video controls>
+                        <source src="video5.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-title">Monetization Strategies That Work</div>
                 </div>
             </div>
+            
+            <a href="https://t.me/+xsuuHoblELc5MWE1" class="cta-button" target="_blank">Join Our Community Today</a>
         </div>
-    </section>
-    
-    <section class="testimonials">
-        <div class="container">
-            <h2>What Our Users Say</h2>
-            <div class="testimonial-grid">
-                <div class="testimonial">
-                    <p>"I gained 500 subscribers in my first month using YTSubs! It's helped me reach monetization faster."</p>
-                    <p>- Sarah, Cooking Channel</p>
-                </div>
-                <div class="testimonial">
-                    <p>"Great way to connect with other creators while growing my audience. Highly recommend!"</p>
-                    <p>- Mike, Tech Reviews</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <section id="signup" class="hero" style="padding-bottom: 5rem;">
-        <div class="container">
-            <h2>Ready to Grow Your Channel?</h2>
-            <p>Join thousands of creators who are growing their audience every day.</p>
-            <a href="#" class="cta-button">Sign Up Free</a>
-        </div>
-    </section>
+    </div>
     
     <footer>
-        <div class="container">
-            <p>&copy; 2023 YTSubs. All rights reserved.</p>
-            <p class="disclaimer">Disclaimer: This service promotes organic growth only. We do not support or encourage any practices that violate YouTube's Terms of Service. All subscriptions come from real users interested in your content.</p>
-        </div>
+        <p>&copy; 2023 YT Subscriber's. All rights reserved.</p>
+        <p>This service is not affiliated with YouTube or Google LLC.</p>
     </footer>
+    
+    <script>
+        // DOM elements
+        const subscriptionGate = document.getElementById('subscriptionGate');
+        const verifyBtn = document.getElementById('verifyBtn');
+        const homepage = document.getElementById('homepage');
+        const menuBtn = document.getElementById('menuBtn');
+        const closeSidebar = document.getElementById('closeSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const homeMenuItem = document.getElementById('homeMenuItem');
+        const getSubsMenuItem = document.getElementById('getSubsMenuItem');
+        const supportMenuItem = document.getElementById('supportMenuItem');
+        
+        // Check if user has already verified
+        const hasVerified = localStorage.getItem('hasVerified');
+        
+        if (hasVerified === 'true') {
+            subscriptionGate.style.display = 'none';
+            homepage.style.display = 'block';
+        }
+        
+        // Verify button click handler
+        verifyBtn.addEventListener('click', function() {
+            // In a real implementation, you might want to actually verify the subscriptions
+            // For this demo, we'll just set a flag in localStorage
+            localStorage.setItem('hasVerified', 'true');
+            subscriptionGate.style.display = 'none';
+            homepage.style.display = 'block';
+        });
+        
+        // Sidebar toggle
+        menuBtn.addEventListener('click', function() {
+            sidebar.classList.add('open');
+        });
+        
+        closeSidebar.addEventListener('click', function() {
+            sidebar.classList.remove('open');
+        });
+        
+        // Menu item click handlers
+        homeMenuItem.addEventListener('click', function() {
+            sidebar.classList.remove('open');
+            // Already on home page
+        });
+        
+        getSubsMenuItem.addEventListener('click', function() {
+            sidebar.classList.remove('open');
+            window.open('https://t.me/+xsuuHoblELc5MWE1', '_blank');
+        });
+        
+        supportMenuItem.addEventListener('click', function() {
+            sidebar.classList.remove('open');
+            window.open('https://t.me/+xsuuHoblELc5MWE1', '_blank');
+        });
+    </script>
 </body>
 </html>
